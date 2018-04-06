@@ -1,0 +1,12 @@
+Assignment
+----------------------------------------------------------------------------------------
+• Select any data source more than two dimensions from the UCI Machine Learning Dataset
+http://archive.ics.uci.edu/ml/. (Do not select digits.)
+
+• Develop a Support Vector Machine Classiﬁer predict proper classes.
+
+ • For more than two classes.
+
+ • Try linear-, polynomial-, Gaussian-, and other kernels. Which works best and why?
+
+ • You can use a library. 
