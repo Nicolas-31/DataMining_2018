@@ -9,4 +9,4 @@ http://archive.ics.uci.edu/ml/. (Do not select digits.)
 
  • Try linear-, polynomial-, Gaussian-, and other kernels. Which works best and why?
 
- • You can use a library. 
+ • You can use a library.
