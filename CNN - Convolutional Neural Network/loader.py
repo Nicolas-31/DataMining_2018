@@ -22,8 +22,8 @@ def getDataSet(filename):
 
     for line in openFile(filename):
         l = line.split()
-        #if l[0] in open('female_names.txt').read():
-        if l[0] in open('male_names.txt').read():
+        if l[0] in open('female_names.txt').read():
+        #if l[0] in open('male_names.txt').read():
             label = 1
         else:
             label = 0
@@ -36,5 +36,5 @@ def getDataSet(filename):
 
 x = getDataSet('peopleDevTrain.txt')
 y = getDataSet('peopleDevTest.txt')
-#pickle.dump((x, y), open('female.p', 'wb'))
-pickle.dump((x, y), open('male.p', 'wb'))
+pickle.dump((x, y), open('female.p', 'wb'))
+#pickle.dump((x, y), open('male.p', 'wb'))
