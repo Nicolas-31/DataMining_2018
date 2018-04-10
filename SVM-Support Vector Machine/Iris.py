@@ -62,6 +62,6 @@ print("RBF")
 testSVM(svm_rbf, test_data_0, test_data_1, test_data_2)
 print(x*10)
 
-print("Linear")
+print("Sigmoid")
 testSVM(svm_sigmoid, test_data_0, test_data_1, test_data_2)
 print(x*10)
