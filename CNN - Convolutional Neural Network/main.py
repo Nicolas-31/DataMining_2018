@@ -8,8 +8,8 @@ import numpy as np
 batch_size = 25
 num_classes = 2
 epochs = 10
-(x_train, y_train),(x_test, y_test) = pickle.load(open('female.p', 'rb'))
-#(x_train, y_train),(x_test, y_test) = pickle.load(open('male.p', 'rb'))
+#(x_train, y_train),(x_test, y_test) = pickle.load(open('female.p', 'rb'))
+(x_train, y_train),(x_test, y_test) = pickle.load(open('male.p', 'rb'))
 
 def reshape(x):
     x = np.asarray(x)

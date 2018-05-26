@@ -4,3 +4,28 @@ The dataset is available from http://vis-www.cs.umass.edu/lfw/
 Can you recognize male/female?
 
 Can you recognize individualis?
+-------------------------------------------------------------------------------------------------------
+How to run the program
+-------------------------------------------------------------------------------------------------------
+To test female
+In loader.py
+if l[0] in open('female_names.txt').read(): uncomment like this
+#if l[0] in open('male_names.txt').read(): comment like this
+pickle.dump((x, y), open('female.p', 'wb')) uncomment like this
+#pickle.dump((x, y), open('male.p', 'wb')) comment like this
+
+In main.py
+(x_train, y_train),(x_test, y_test) = pickle.load(open('female.p', 'rb')) uncomment like this
+#(x_train, y_train),(x_test, y_test) = pickle.load(open('male.p', 'rb')) comment like this
+--------------------------------------------------------------------------------------------------------
+To test the male
+In loader.py
+#if l[0] in open('female_names.txt').read(): comment like this
+if l[0] in open('male_names.txt').read(): uncomment like this
+#pickle.dump((x, y), open('female.p', 'wb')) comment like this
+pickle.dump((x, y), open('male.p', 'wb')) uncomment like this
+
+In main.py
+#(x_train, y_train),(x_test, y_test) = pickle.load(open('female.p', 'rb')) comment like this
+#(x_train, y_train),(x_test, y_test) = pickle.load(open('male.p', 'rb')) uncomment like this
+
