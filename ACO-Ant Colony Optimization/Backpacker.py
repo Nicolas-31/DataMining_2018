@@ -1,10 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jan 20 12:47:02 2018
 
-@author: eivind
-"""
 import random
 import math
 from matplotlib import pyplot as plt
@@ -18,19 +12,20 @@ MINEDGES = 9
 # Country,City,AccentCity,Region,Population,Latitude,Longitude
 class City:
     def __init__(self, line):
-        self.countryCode = self.getPart(line, 0)
-        self.city = self.getPart(line, 1)
-        self.accentCity = self.getPart(line, 2)
-        self.region = self.getPart(line, 3)
-        self.latitude = float(self.getPart(line, 5))
-        self.longitude = float(self.getPart(line, 6))
+        self.countryCode = self.getItem(line, 0)
+        self.city = self.getItem(line, 1)
+        self.accentCity = self.getItem(line, 2)
+        self.region = self.getItem(line, 3)
+        self.population = self.getItem(line, 4)
+        self.latitude = float(self.getItem(line, 5))
+        self.longitude = float(self.getItem(line, 6))
 
-    def getPart(self, line, n):
+    def getItem(self, line, n):
         parts = line.split(",")
         return parts[n]
 
     # Simplified. Should use great circle.
-    def getDistance(self, otherCity):
+    def getLength(self, otherCity):
         dx = self.longitude - otherCity.longitude
         dy = self.latitude - otherCity.latitude
         return math.sqrt((dx) ** 2 + (dy) ** 2)
@@ -46,7 +41,7 @@ class Node:
         self.edges = []
         self.isEndNode = False
 
-    def rouletteWheelver2(self, visitedEdges, minNodeCount, startNode, endNode):
+    def rouletteWheel(self, visitedEdges, minNodeCount, startNode, endNode):
         visitedNodes = [oneEdge.toNode for oneEdge in visitedEdges]
         #print(visitedEdges)
         viableEdges = [oneEdge for oneEdge in self.edges if not oneEdge.toNode in visitedNodes and oneEdge.toNode != startNode]
@@ -91,7 +86,7 @@ class Edge:
     def __init__(self, fromNode, toNode):
         self.fromNode = fromNode
         self.toNode = toNode
-        self.cost = fromNode.getCity().getDistance(toNode.getCity())
+        self.cost = fromNode.getCity().getLength(toNode.getCity())
         self.pheromones = MAXPHEROMONES
         self.maxPheromones = MAXPHEROMONES
         self.minPheromones = MINPHEROMONES
@@ -107,14 +102,13 @@ class Edge:
             self.pheromones = self.minPheromones
 
     def isEqual(self, other):
-        return self.fromNode == other.fromNode and self.toNode == other.toNode;
+        return self.fromNode == other.fromNode and self.toNode == other.toNode
 
     def __repr__(self):
         return self.fromNode.name + "--(" + str(self.cost) + ")--" + self.toNode.name + ", pheromones: " + str(
             round(self.pheromones, 2))
 
-    # def __cmp__(self, other):
-    #     return self.cost.__cmp__(other.cost)
+
 
 
 class Ant:
@@ -128,8 +122,8 @@ class Ant:
         prevEdge = None
         ntries = 0
 
-        while (not self.checkAllNodesPresent2(self.visitedEdges, minEdgeCount, endNode)):
-            currentEdge = currentNode.rouletteWheelver2(self.visitedEdges, minEdgeCount, startNode, endNode)
+        while (not self.checkAllNodesPresent(self.visitedEdges, minEdgeCount, endNode)):
+            currentEdge = currentNode.rouletteWheel(self.visitedEdges, minEdgeCount, startNode, endNode)
 
             # print("currentEdge", currentEdge)
             if currentEdge == None:
@@ -166,14 +160,9 @@ class Ant:
             for oneEdge in self.visitedEdges:
                 oneEdge.pheromones += score
 
-    # def checkAllNodesPresent(self, edges):
-    #     visitedNodes = [edge.toNode for edge in edges]
-    #     visitedNodes.append(self.chosenNodes[0])
-    #     return set(self.chosenNodes).issubset(visitedNodes)
 
-    def checkAllNodesPresent2(self, edges, minNodeCount, endNode):
+    def checkAllNodesPresent(self, edges, minNodeCount, endNode):
         visitedNodes = [edge.toNode for edge in edges]
-        #tmp1 = endNode in visitedNodes #unødvendig
         return len(visitedNodes) >= minNodeCount and endNode in visitedNodes
 
     def printEdges(self):
@@ -186,23 +175,14 @@ minCost = 10000000
 
 def getCities(filename): #leser fra fil og returnerer byer
     cities = dict()
-    in_handle = open(filename,'r')#"rt", encoding="iso-8859-1"
-    for line in in_handle:
+    inFile = open(filename,'r')#"rt", encoding="iso-8859-1"
+    for line in inFile:
         city = City(line)
         cities[city.getName()] = city
 
-    in_handle.close()
+    inFile.close()
     return cities
 
-
-# def getRandomCities(cityList, startCity, endCity, count):
-#     _selectedList = random.sample(cityList, count) #returnerer list av tilfeldig byer
-#     _selectedList.remove(startCity)
-#     _selectedList.remove(endCity)
-#
-#     _selectedList.insert(0, startCity)
-#     _selectedList.append(endCity)
-#     return _selectedList
 
 
 # create edges between nodes. Nodes must have less distance that maxNodeDist.
@@ -214,7 +194,7 @@ def getEdges(nodeList, maxNodeDist, startCity):
         # _fromNode = nodeList[n]
         for k in range(1, len(nodeList)):
             _toNode = nodeList[k]
-            dist = _fromNode.city.getDistance(_toNode.city)  #
+            dist = _fromNode.city.getLength(_toNode.city)  #
             if dist < maxNodeDist:
                 # Ensure no edge from self to self
                 if _fromNode != _toNode and _toNode.city != startCity:
@@ -238,18 +218,17 @@ def getEdges(nodeList, maxNodeDist, startCity):
 def getSum(edges):
     return sum([e.getCost() for e in edges]) #/ 2
 
-#filename= "./data_no"
-#filename = "60cities.txt"
-filename = "morecities.txt"
+filename = "61cities.txt"
+#filename = "morecities.txt"
 allCities = getCities(filename)
 cityList = list(allCities.values())
 cityCount = len(allCities)
 
 print("No of cities:", cityCount)
-startCity = allCities.get("oslo")
-endCity = allCities.get("bergen")
+startCity = allCities.get("arendal")
+endCity = allCities.get("stavanger")
 
-totalDist = startCity.getDistance(endCity)
+totalDist = startCity.getLength(endCity)
 print("Dist: ", totalDist)
 
 edges = []
@@ -279,13 +258,13 @@ bestVisits = []
 
 startNode = None
 for node in nodes:
-    if node.name == 'oslo':
+    if node.name == 'arendal':
         startNode = node
         break
 
 endNode = None
 for node in nodes:
-    if node.name == 'bergen':
+    if node.name == 'stavanger':
         endNode = node
         break
 
@@ -342,8 +321,8 @@ def walkRandomPaths(max):
 
 walkRandomPaths(30000) #repetasjon 20000 ganger
 #plotter to forskjellige grafer
-plotGraph(resultsCost, "Cost") #(skal gå til y-aksen)
-plotGraph(resultsCount, "Edges") #(skal gå til y-aksen)
+plotGraph(resultsCost, "Cost") #(y-aksen)
+plotGraph(resultsCount, "Edges") #(y-aksen i graf)
 
 print("The best result:")
 printVisits(bestVisits)

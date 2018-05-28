@@ -58,3 +58,4 @@ no,vinstra,Vinstra,11,2467,61.6,9.75
 no,bykle,Bykle,02,226,59.35,7.333333
 no,rjukan,Rjukan,17,3576,59.866667,8.566667
 no,tonstad,Tonstad,19,756,58.666667,6.716667
+no,tromso,Tromsø,18,52747,69.666667,18.966667

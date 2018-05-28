@@ -1,11 +1,11 @@
 def getCountry(filename, countryCode):
     lines = dict()
-    in_handle = open(filename, "rt", encoding="iso-8859-1")
+    inFile = open(filename, "r", encoding="iso-8859-1")
     found = False
-    for line in in_handle:
+    for line in inFile:
         if line[0:2] == "no":
             found = True
-            city = getPart(line, 1)
+            city = getItem(line, 1)
             if city not in lines:
                 lines[city] = line
 
@@ -15,24 +15,24 @@ def getCountry(filename, countryCode):
         elif found == True:
             break
 
-    in_handle.close()
+    inFile.close()
     return lines
 
 
-def getPart(line, n):
+def getItem(line, n):
     parts = line.split(",")
     return parts[n]
 
 
-def saveLinesToFile(filename, lines):
-    o_handle = open(filename, "w")
-    o_handle.writelines(lines.values())
+def saveResultsToFile(filename, lines):
+    outFile = open(filename, "w")
+    outFile.writelines(lines.values())
 
-    o_handle.close()
+    outFile.close()
 
 
 worldfile = "worldcitiespop.txt"
-nofile = "nocitiespop.txt"
+norwayfile = "nocitiespop.txt"
 
 no_lines = getCountry(worldfile, "no")
-saveLinesToFile(nofile, no_lines)
+saveResultsToFile(norwayfile, no_lines)
