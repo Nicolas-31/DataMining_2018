@@ -7,7 +7,7 @@ import numpy as np
 
 # data I/O
 #filename= './datafiles/PMC4006623.txt'
-filename = "data.txt"
+filename = "somedata.txt"
 
 
 data = open(filename, 'r').read()  # should be simple plain text file
