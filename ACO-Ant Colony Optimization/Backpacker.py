@@ -225,8 +225,8 @@ cityList = list(allCities.values())
 cityCount = len(allCities)
 
 print("No of cities:", cityCount)
-startCity = allCities.get("arendal")
-endCity = allCities.get("stavanger")
+startCity = allCities.get("oslo")
+endCity = allCities.get("bergen")
 
 totalDist = startCity.getLength(endCity)
 print("Dist: ", totalDist)
@@ -258,13 +258,13 @@ bestVisits = []
 
 startNode = None
 for node in nodes:
-    if node.name == 'arendal':
+    if node.name == 'oslo':
         startNode = node
         break
 
 endNode = None
 for node in nodes:
-    if node.name == 'stavanger':
+    if node.name == 'bergen':
         endNode = node
         break
 
